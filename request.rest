@@ -1,0 +1,24 @@
+GET http://localhost:8080/users
+
+###
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "code_number": "Phuabc",
+    "fullname": "NgocPhus",
+    "password": "123",
+    "confPassword": "123"
+}
+
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+    "code_number": "Phu",
+    "password": ""
+}
+
+###
+DELETE  http://localhost:8080/logout
