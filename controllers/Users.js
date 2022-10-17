@@ -13,6 +13,22 @@ export const getUsers = async(req, res) => {
     }
 }
 
+export const getUserById = async (req, res) => {
+    try {
+        const user = await Users.findAll({
+            where: {
+                id: req.params.id,
+                // code_number: req.params.code_number,
+                // phone_numer: req.params.phone_numer,
+                // email: req.params.email
+            }
+        });
+        res.json(user[0]);
+    } catch(error) {
+        res.json({ message: error.message });
+    }
+}
+
 export const Register = async(req, res) => {
     const { code_number, fullname , password, confPassword } = req.body;
     if(password !== confPassword) return res.status(400).json({msg: "Password and Confirm Password do not match"});
