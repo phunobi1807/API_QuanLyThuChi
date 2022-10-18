@@ -1,6 +1,7 @@
 import Users from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
  
 export const getUsers = async(req, res) => {
     try {
@@ -13,24 +14,74 @@ export const getUsers = async(req, res) => {
     }
 }
 
-export const getUserById = async (req, res) => {
+export const getUserByCodeNumber = async(req, res) =>{
     try {
-        const user = await Users.findAll({
-            where: {
-                id: req.params.id,
-                // code_number: req.params.code_number,
-                // phone_numer: req.params.phone_numer,
-                // email: req.params.email
+        const response = await Users.findOne({
+            where:{
+                code_number: req.params.code_number
             }
         });
-        res.json(user[0]);
-    } catch(error) {
-        res.json({ message: error.message });
+        res.status(200).json(response);
+    } catch (error) {
+        console.log(error.message);
     }
 }
 
+// export const getUserByFullName = async(req, res) =>{
+//     try {
+//         const response = await Users.findOne({
+//             where:{
+//                 fullname: req.params.fullname
+//             }
+//         });
+//         res.status(200).json(response);
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+// export const getUserById = async (req, res) => {
+//     try {
+//         const user = await Users.findOne({
+//             where: {
+//                 id: req.params.id,
+//                 // code_number: req.params.code_number,
+//                 // phone_numer: req.params.phone_numer,
+//                 // email: req.params.email
+//             }
+//         });
+//         res.json(user);
+//     } catch(error) {
+//         res.json({ message: error.message });
+//     }
+// }
+// export const getUserByEmail = async (req, res) => {
+//     try {
+//         const user = await Users.findAll({
+//             where: {
+//                 email: req.params.email,
+//             }
+//         });
+//         res.json(user[0]);
+//     } catch(error) {
+//         res.json({ message: error.message });
+//     }
+// }
+// export const getUserByName = async (req, res) => {
+//     try {
+//         const user = await Users.findAll({
+//             where: {
+//                 fullname: req.params.fullname,
+//             }
+//         });
+//         res.json(user[0]);
+//     } catch(error) {
+//         res.json({ message: error.message });
+//     }
+// }
+
 export const Register = async(req, res) => {
-    const { code_number, fullname , password, confPassword } = req.body;
+    const { code_number, fullname, phone_number ,email , password, confPassword } = req.body;
     if(password !== confPassword) return res.status(400).json({msg: "Password and Confirm Password do not match"});
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
@@ -38,6 +89,8 @@ export const Register = async(req, res) => {
         await Users.create({
             code_number: code_number,
             fullname: fullname,
+            email: email,
+            phone_number: phone_number,
             password: hashPassword
         });
         res.json({msg: "Register Successful"});

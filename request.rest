@@ -1,16 +1,19 @@
 GET http://localhost:8080/users
 
 ###
-# GET http://localhost:8080/users/:id
+GET http://localhost:8080/users/TT1607
+
 ###
 POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-    "code_number": "Phuabc",
-    "fullname": "NgocPhus",
-    "password": "123",
-    "confPassword": "123"
+    "code_number": "TT1607",
+    "fullname": "TrungKien",
+    "email": "kien@gmail.com",
+    "phone_number": "132145631456",
+    "password": "123456",
+    "confPassword": "123456"
 }
 
 ###
@@ -18,8 +21,8 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "code_number": "Phu",
-    "password": ""
+    "code_number": "Phuabc",
+    "password": "123"
 }
 
 ###
