@@ -2,6 +2,7 @@ import Users from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { Sequelize, Op, NUMBER } from "sequelize";
  
 export const getUsers = async(req, res) => {
     try {
@@ -15,23 +16,39 @@ export const getUsers = async(req, res) => {
 }
 
 export const getUserByCodeNumber = async(req, res) =>{
-    try {
-        const response = await Users.findOne({
-            where:{
-                code_number: req.params.code_number
-            }
+    const code_number = req.query.code_number;
+    const phone_number = req.query.phone_number;
+    Users.findAll({
+        where: {
+            [Op.or]: [{
+                code_number: {
+                        [Op.like]: "%code_number"
+                    }
+                },
+                {
+                    phone_number: {
+                        [Op.like]: "%phone_number"
+                    }
+                }
+            ]
+        }
+    })
+    .then(data => {
+        res.send(data);
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while retrieving tutorials."
         });
-        res.status(200).json(response);
-    } catch (error) {
-        console.log(error.message);
-    }
+    });
 }
 
-// export const getUserByFullName = async(req, res) =>{
+// export const getUserByCodeNumber = async(req, res) =>{
+//     const i = Number
 //     try {
 //         const response = await Users.findOne({
 //             where:{
-//                 fullname: req.params.fullname
+//                 phone_number: +req.params.phone_number[i]
 //             }
 //         });
 //         res.status(200).json(response);
