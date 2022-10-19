@@ -1,13 +1,13 @@
 GET http://localhost:8080/users
 
 ###
-GET http://localhost:8080/users/codeNumber/phu
+GET http://localhost:8080/users/codeNumber/a
 
 ###
-GET http://localhost:8080/users/phoneNumber/
+GET http://localhost:8080/users/phoneNumber/1
 
 ###
-GET http://localhost:8080/users/searchEmail/k
+GET http://localhost:8080/users/searchEmail/u
 
 ###
 GET http://localhost:8080/users/searchFullName/com
@@ -39,14 +39,11 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/users/reset_password
+POST   http://localhost:8080/users/changePassword/NOP
 Content-Type: application/json
 
 {
-    "code_number": "NOP",
-    "oldPassword": "1807",
-    "newPassword": "18072000",
-    "confNewPassword": "18072000"
+    "password": "1807"
 }
 
 ###

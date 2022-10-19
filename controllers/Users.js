@@ -178,3 +178,15 @@ export const Logout = async (req, res) => {
     return res.sendStatus(200);
 }
 
+export const  ChangePassword = async (req, res) => {
+    try {
+        const {code_number} = req.params;
+        const salt = await bcrypt.genSalt();
+        const password = await bcrypt.hash(req.body.password, salt);
+        const userPassword = await Users.findCreateFind({code_number: code_number}, {password: password}, {new: true});
+        return res.status(200).json({status: true, data:userPassword});
+    } catch (error) {
+        return res.status(400).json({status: false, error: "Error Occured"});
+    }
+}
+
