@@ -1,7 +1,19 @@
 GET http://localhost:8080/users
 
 ###
-GET http://localhost:8080/users/1
+GET http://localhost:8080/users/codeNumber/phu
+
+###
+GET http://localhost:8080/users/phoneNumber/
+
+###
+GET http://localhost:8080/users/searchEmail/k
+
+###
+GET http://localhost:8080/users/searchFullName/com
+
+
+
 
 
 ###
@@ -9,12 +21,12 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-    "code_number": "TT1607",
-    "fullname": "TrungKien",
-    "email": "kien@gmail.com",
-    "phone_number": "132145631456",
-    "password": "123456",
-    "confPassword": "123456"
+    "code_number": "NOP",
+    "fullname": "Ngọc Phú",
+    "email": "ngocphu@gmail.com",
+    "phone_number": "121212",
+    "password": "1807",
+    "confPassword": "1807"
 }
 
 ###
@@ -22,8 +34,19 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "code_number": "Phuabc",
-    "password": "123"
+    "code_number": "NOP",
+    "password": "1807"
+}
+
+###
+POST http://localhost:8080/users/reset_password
+Content-Type: application/json
+
+{
+    "code_number": "NOP",
+    "oldPassword": "1807",
+    "newPassword": "18072000",
+    "confNewPassword": "18072000"
 }
 
 ###
