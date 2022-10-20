@@ -19,6 +19,12 @@ const Users = db.define('users', {
     password: {
         type: DataTypes.STRING
     },
+    password_txt: {
+        type: DataTypes.STRING
+    },
+    salt: {
+        type: DataTypes.STRING
+    },
     status: {
         type: DataTypes.BOOLEAN
     },

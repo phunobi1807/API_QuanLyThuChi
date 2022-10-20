@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { Sequelize, Op, NUMBER } from "sequelize";
 
+
 export const getUsers = async (req, res) => {
     try {
         const users = await Users.findAll({
@@ -13,6 +14,85 @@ export const getUsers = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+export const getUserById = async (req, res) => {
+    try {
+        const user = await Users.findAll({
+            where: {
+                id: req.params.id
+            }
+        });
+        res.json(user[0]);
+    } catch(error) {
+        res.json({ message: error.message });
+    }
+}
+
+export const createUser = async (req, res) => {
+    const { fullname, phone_number, email, status } = req.body;
+    // if (password !== confPassword) return res.status(400).json({ msg: "Mật khẩu không trùng khớp, vui lòng nhập lại !" });
+    const salt = await bcrypt.genSalt();
+    const password = await bcrypt.genSalt(); //note
+
+    const hashPassword = await bcrypt.hash(password, salt); //note
+
+    const  makeUserCode = (length) => {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+       
+        for (var i = 0; i < length; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+       
+        return text;
+      }
+      
+    try {
+        await Users.create({
+            code_number: makeUserCode(6),
+            fullname: fullname,
+            email: email,
+            phone_number: phone_number,
+            password: hashPassword,
+            password_txt: password,
+            salt: salt,
+            status: status
+        });
+        res.json({ msg: "Tạo người dùng thành công" });
+    } catch (error) {
+        console.log(error);
+    }
+}
+ 
+export const updateUsers = async (req, res) => {
+    try {
+        await Users.update(req.body, {
+            where: {
+                id: req.params.id
+            }
+        });
+        res.json({
+            "message": "Users Updated"
+        });
+    } catch (error) {
+        res.json({ message: error.message });
+    }  
+}
+
+
+export const deleteUsers = async (req, res) => {
+    try {
+        await Users.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
+        res.json({
+            "message": "Users Deleted"
+        });
+    } catch (error) {
+        res.json({ message: error.message });
+    }  
 }
 
 export const getUserByPhone = async (req, res) => {
@@ -107,34 +187,22 @@ export const getUserByFullName = async (req, res) => {
 }
 
 
-export const Register = async (req, res) => {
-    const { code_number, fullname, phone_number, email, password, confPassword } = req.body;
-    if (password !== confPassword) return res.status(400).json({ msg: "Password and Confirm Password do not match" });
-    const salt = await bcrypt.genSalt();
-    const hashPassword = await bcrypt.hash(password, salt);
-    try {
-        await Users.create({
-            code_number: code_number,
-            fullname: fullname,
-            email: email,
-            phone_number: phone_number,
-            password: hashPassword
-        });
-        res.json({ msg: "Register Successful" });
-    } catch (error) {
-        console.log(error);
-    }
-}
+
 
 export const Login = async (req, res) => {
+    const {code_number, password} = req.body;
     try {
         const user = await Users.findAll({
             where: {
-                code_number: req.body.code_number
+                code_number: code_number
             }
         });
-        const match = await bcrypt.compare(req.body.password, user[0].password);
-        if (!match) return res.status(400).json({ msg: "Wrong Password" });
+        if(user[0].status === true) {
+            const hashPassword = await bcrypt.hash(password, user[0].salt); //note
+            const match = await bcrypt.compare(hashPassword, user[0].password); //note
+            console.log(typeof hashPassword);
+            console.log(typeof user[0].password);
+        if (!match) return res.status(400).json({ msg: "Sai mật khẩu, vui lòng nhập lại !" });
         const userId = user[0].id;
         const fullname = user[0].fullname;
         const userCode = user[0].code_number;
@@ -154,8 +222,11 @@ export const Login = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000
         });
         res.json({ accessToken });
+        } else  {
+            res.status(404).json({msg: "Tài khoản không được phép đăng nhập"})
+        }
     } catch (error) {
-        res.status(404).json({ msg: "User code not true" });
+        res.status(404).json({ msg: "Mã đăng nhập không đúng" });
     }
 }
 
@@ -178,15 +249,4 @@ export const Logout = async (req, res) => {
     return res.sendStatus(200);
 }
 
-export const  ChangePassword = async (req, res) => {
-    try {
-        const {code_number} = req.params;
-        const salt = await bcrypt.genSalt();
-        const password = await bcrypt.hash(req.body.password, salt);
-        const userPassword = await Users.findCreateFind({code_number: code_number}, {password: password}, {new: true});
-        return res.status(200).json({status: true, data:userPassword});
-    } catch (error) {
-        return res.status(400).json({status: false, error: "Error Occured"});
-    }
-}
 

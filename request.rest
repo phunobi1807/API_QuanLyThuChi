@@ -1,4 +1,4 @@
-GET http://localhost:8080/users
+GET http://localhost:8080/users/1
 
 ###
 GET http://localhost:8080/users/codeNumber/a
@@ -14,19 +14,25 @@ GET http://localhost:8080/users/searchFullName/com
 
 
 
+###
 
+PATCH  http://localhost:8080/users/18
+Content-Type: application/json
+
+{
+    "password": "18072000",
+    "status": false
+}
 
 ###
 POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-    "code_number": "NOP",
-    "fullname": "Ngọc Phú",
+    "fullname": "Ngọc Phú bbbc",
     "email": "ngocphu@gmail.com",
     "phone_number": "121212",
-    "password": "1807",
-    "confPassword": "1807"
+    "status": true
 }
 
 ###
@@ -34,16 +40,8 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "code_number": "NOP",
-    "password": "1807"
-}
-
-###
-POST   http://localhost:8080/users/changePassword/NOP
-Content-Type: application/json
-
-{
-    "password": "1807"
+    "code_number": "B77IMY",
+    "password": "$2b$10$gfEWMiT8xdonR16RtbYvDe"
 }
 
 ###
