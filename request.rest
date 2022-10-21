@@ -16,12 +16,12 @@ GET http://localhost:8080/users/searchFullName/com
 
 ###
 
-PATCH  http://localhost:8080/users/18
+PATCH  http://localhost:8080/users/56
 Content-Type: application/json
 
 {
-    "password": "18072000",
-    "status": false
+    "code_number": "OPTECH",
+    "status": true
 }
 
 ###
@@ -29,9 +29,9 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-    "fullname": "Ngọc Phú bbbc",
-    "email": "ngocphu@gmail.com",
-    "phone_number": "121212",
+    "fullname": "THINKTODO",
+    "email": "thinktodo@gmail.com",
+    "phone_number": "+840123456",
     "status": true
 }
 
@@ -40,8 +40,8 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "code_number": "B77IMY",
-    "password": "$2b$10$gfEWMiT8xdonR16RtbYvDe"
+    "code_number": "5ZJY7I",
+    "password": "$2b$10$KBFX7yDNF9uuEu/Dv.j5xO"
 }
 
 ###

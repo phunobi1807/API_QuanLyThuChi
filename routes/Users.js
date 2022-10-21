@@ -5,7 +5,7 @@ import { verifyToken } from "../middleware/VerifyToken";
 
 const routerUsers = express.Router();
 
-routerUsers.get("/users" ,getUsers);
+routerUsers.get("/users",verifyToken ,getUsers);
 routerUsers.get("/users/:id" ,getUserById);
 routerUsers.post("/users/" , createUser);
 routerUsers.patch('/users/:id', updateUsers);
