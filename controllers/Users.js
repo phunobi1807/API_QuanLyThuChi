@@ -16,18 +16,6 @@ export const getUsers = async (req, res) => {
     }
 }
 
-export const getUserById = async (req, res) => {
-    try {
-        const user = await Users.findAll({
-            where: {
-                id: req.params.id
-            }
-        });
-        res.json(user[0]);
-    } catch (error) {
-        res.json({ message: error.message });
-    }
-}
 
 export const createUser = async (req, res) => {
     const { fullname, phone_number, email, status } = req.body;
@@ -96,62 +84,18 @@ export const deleteUsers = async (req, res) => {
 }
 
 export const getUserByPhone = async (req, res) => {
-    const phone_number = req.params.phone_number;
+    const {query} = req.query;
+    console.log(query);
     Users.findAll({
-        where: {
-            [Op.and]: [
-                {
-                    phone_number: {
-                        [Op.like]: "%" + phone_number + "%"
-                    }
-                }
-            ]
-        }
-    })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
-            });
-        });
-}
-export const getUserByCodeNumber = async (req, res) => {
-    const code_number = req.params.code_number;
-    Users.findAll({
-        where: {
-            [Op.and]: [
-                {
-                    code_number: {
-                        [Op.like]: "%" + code_number + "%"
-                    }
-                }
-            ]
-        }
-    })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
-            });
-        });
-}
+        attributes: ['id', 'code_number', 'fullname', 'phone_number', 'email', 'status'],
+        where: { [Op.or]: [
+            { id: { [Op.like]: `%${query}%`} },
+            { code_number: { [Op.like]: `%${query}%`} },
+             { fullname: { [Op.like]: `%${query}%`} },
+             { phone_number: { [Op.like]: `%${query}%`} },
+             { email: { [Op.like]: `%${query}%`} }
 
-export const getUserByEmail = async (req, res) => {
-    const email = req.params.email;
-    Users.findAll({
-        where: {
-            [Op.and]: [
-                {
-                    email: {
-                        [Op.like]: "%" + email + "%"
-                    }
-                }
-            ]
-        }
+            ]}
     })
         .then(data => {
             res.send(data);
@@ -162,30 +106,6 @@ export const getUserByEmail = async (req, res) => {
             });
         });
 }
-
-export const getUserByFullName = async (req, res) => {
-    const fullname = req.params.fullname;
-    Users.findAll({
-        where: {
-            [Op.and]: [
-                {
-                    fullname: {
-                        [Op.like]: "%" + fullname + "%"
-                    }
-                }
-            ]
-        }
-    })
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving tutorials."
-            });
-        });
-}
-
 
 
 

@@ -1,17 +1,6 @@
-GET http://localhost:8080/users/1
 
-###
-GET http://localhost:8080/users/codeNumber/a
 
-###
-GET http://localhost:8080/users/phoneNumber/1
-
-###
-GET http://localhost:8080/users/searchEmail/u
-
-###
-GET http://localhost:8080/users/searchFullName/com
-
+GET http://localhost:8080/users/search?query=n
 
 
 ###
