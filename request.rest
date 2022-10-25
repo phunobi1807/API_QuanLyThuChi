@@ -1,16 +1,11 @@
 
+GET http://localhost:8080/users/search?query=kien
 
-GET http://localhost:8080/users/search?query=n
-
-
-###
-
-PATCH  http://localhost:8080/users/56
+PATCH  http://localhost:8080/users/55
 Content-Type: application/json
 
 {
-    "code_number": "OPTECH",
-    "status": true
+    "status": false
 }
 
 ###
@@ -18,19 +13,19 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-    "fullname": "THINKTODO",
-    "email": "thinktodo@gmail.com",
-    "phone_number": "+840123456",
+    "fullname": "Kiên aaa",
+    "email": "abcdef22@gmail.com",
+    "phone_number": "12345671",
     "status": true
 }
 
-###
+### 
 POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "code_number": "5ZJY7I",
-    "password": "$2b$10$KBFX7yDNF9uuEu/Dv.j5xO"
+    "code_number": "GS5DJB",
+    "password": "$2b$10$XRnWg8BzaIxfPoANcuTCzO"
 }
 
 ###

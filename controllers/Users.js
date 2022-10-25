@@ -2,6 +2,7 @@ import Users from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import nodemailer from "nodemailer";
 import { Sequelize, Op, NUMBER } from "sequelize";
 
 
@@ -36,6 +37,15 @@ export const createUser = async (req, res) => {
     }
 
     try {
+        const user = await Users.findAll({
+            where: {
+                email: email,
+                phone_number: phone_number
+            }
+        })
+        if(email === user[0]?.email) return res.status(400).json({ msg: "Email đã tồn tại, vui lòng sử dụng email khác" });
+       
+
         await Users.create({
             code_number: makeUserCode(6),
             fullname: fullname,
@@ -46,9 +56,10 @@ export const createUser = async (req, res) => {
             salt: salt,
             status: status
         });
+        
         res.json({ msg: "Tạo người dùng thành công" });
     } catch (error) {
-        console.log(error);
+        res.status(404).json({msg: "Số điện thoại và email đã tồn tại"})
     }
 }
 
@@ -84,18 +95,20 @@ export const deleteUsers = async (req, res) => {
 }
 
 export const getUserByPhone = async (req, res) => {
-    const {query} = req.query;
+    const { query } = req.query;
     console.log(query);
     Users.findAll({
         attributes: ['id', 'code_number', 'fullname', 'phone_number', 'email', 'status'],
-        where: { [Op.or]: [
-            { id: { [Op.like]: `%${query}%`} },
-            { code_number: { [Op.like]: `%${query}%`} },
-             { fullname: { [Op.like]: `%${query}%`} },
-             { phone_number: { [Op.like]: `%${query}%`} },
-             { email: { [Op.like]: `%${query}%`} }
+        where: {
+            [Op.or]: [
+                { id: { [Op.like]: `%${query}%` } },
+                { code_number: { [Op.like]: `%${query}%` } },
+                { fullname: { [Op.like]: `%${query}%` } },
+                { phone_number: { [Op.like]: `%${query}%` } },
+                { email: { [Op.like]: `%${query}%` } }
 
-            ]}
+            ]
+        }
     })
         .then(data => {
             res.send(data);
@@ -147,7 +160,7 @@ export const Login = async (req, res) => {
             res.status(404).json({ msg: "Tài khoản không được phép đăng nhập" })
         }
     } catch (error) {
-        res.status(404).json({ msg: "Mã đăng nhập không đúng" });
+        res.status(404).json({ msg: "Mã đăng nhập không đúng hoặc tài khoản không được phép đăng nhập ! " });
     }
 }
 
@@ -168,6 +181,49 @@ export const Logout = async (req, res) => {
     });
     res.clearCookie('refreshToken');
     return res.sendStatus(200);
+}
+
+export const getSendMail = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await Users.findOne({
+            where: {
+                email: email
+            }
+        });
+
+        let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "phunobi1807@gmail.com",
+                pass: "njreccjobvgbmzdc",
+            },
+        });
+        await transporter.sendMail({
+            from: "phunobi1807@gmail.com",
+            to: `${email}`,
+            subject: "Vui lòng nhấn vào link để đổi mật khẩu",
+            text: `Mật khẩu cũ của bạn là  ${user.password_txt}  Vui lòng ấn vào link http://192.168.1.11:3000/change để đổi mật khẩu`,
+        });
+        res.status(200).json(user[0]);
+        //   res.status(200).json({msg: "Vui lòng xem Email !"})
+    } catch (error) {
+        res.status(404).json({ msg: "Email không đúng" });
+    }
+}
+
+export const changePassword = async (req, res) => {
+    const {currentPassword, newPassword, confNewPassword} = req.body;
+    try {
+        const user = await Users.findAll({
+            where: {
+                password: currentPassword
+            }
+        })
+        res.status(200).json(user)
+    } catch (error) {
+        res.status(404).json({ msg: "Mật khẩu cũ không đúng !" });
+    }
 }
 
 
