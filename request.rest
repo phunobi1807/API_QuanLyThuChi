@@ -1,11 +1,13 @@
 
 GET http://localhost:8080/users/search?query=kien
 
-PATCH  http://localhost:8080/users/55
+###
+PATCH  http://localhost:8080/users/23
 Content-Type: application/json
 
 {
-    "status": false
+    "code_number": "NP",
+    "status": true
 }
 
 ###
@@ -13,8 +15,8 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-    "fullname": "Phus",
-    "email": "phunobi1807@gmail.com",
+    "fullname": "PhuJunior",
+    "email": "phudev1807@gmail.com",
     "phone_number": "12345671",
     "status": true
 }
@@ -24,9 +26,26 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "code_number": "3RVO2Y",
-    "password": "$2b$10$H0.Zm9.DsTbYZtHFsn5Xuu"
+    "code_number": "NP",
+    "password": "123456"
 }
 
 ###
 DELETE  http://localhost:8080/logout
+
+###
+POST http://localhost:8080/forgot-password
+Content-Type: application/json
+
+{
+    "email" : "phunobi1807@gmail.com"
+}
+
+###
+PATCH http://localhost:8080/reset-password/phudev1807@gmail.com
+Content-Type:  application/json
+
+{
+    "newPassword": "123456",
+    "confNewPassword": "123456"
+}

@@ -44,8 +44,8 @@ export const createUser = async (req, res) => {
                 phone_number: phone_number
             }
         })
-        if(email === user[0]?.email) return res.status(400).json({ msg: "Email đã tồn tại, vui lòng sử dụng email khác" });
-       
+        if (email === user[0]?.email) return res.status(400).json({ msg: "Email đã tồn tại, vui lòng sử dụng email khác" });
+
 
         await Users.create({
             code_number: makeUserCode(6),
@@ -57,10 +57,10 @@ export const createUser = async (req, res) => {
             salt: salt,
             status: status
         });
-        
+
         res.json({ msg: "Tạo người dùng thành công" });
     } catch (error) {
-        res.status(404).json({msg: "Số điện thoại và email đã tồn tại"})
+        res.status(404).json({ msg: "Số điện thoại và email đã tồn tại" })
     }
 }
 
@@ -184,7 +184,7 @@ export const Logout = async (req, res) => {
     return res.sendStatus(200);
 }
 
-export const getSendMail = async (req, res) => {
+export const forgotPassword = async (req, res) => {
     const { email } = req.body;
     try {
         const user = await Users.findOne({
@@ -192,6 +192,7 @@ export const getSendMail = async (req, res) => {
                 email: email
             }
         });
+        if (!user) return res.json({ msg: "Email khong dung" });
 
         let transporter = nodemailer.createTransport({
             service: "gmail",
@@ -204,19 +205,35 @@ export const getSendMail = async (req, res) => {
             from: "phunobi1807@gmail.com",
             to: `${email}`,
             subject: "Vui lòng nhấn vào link để đổi mật khẩu",
-            text: `Mật khẩu cũ của bạn là  ${user.password_txt} \nVui lòng ấn vào link http://192.168.102.5:3000/change để đổi mật khẩu`,
+            text: `Mật khẩu cũ của bạn là  ${user.password_txt} \nVui lòng ấn vào link http://localhost:8080/reset-password/${email} để đổi mật khẩu`,
         });
         res.status(200).json(user[0]);
     } catch (error) {
-        res.status(404).json({ msg: "Email không đúng" });
+        res.status(404).json({ msg: "Error" });
     }
 }
 // text: 'To reset your password, please click the link below.\n\nhttps://'+process.env.DOMAIN+'/user/reset-password?token='+encodeURIComponent(token)+'&email='+req.body.email
 
 export const resetPassword = async (req, res) => {
+    const { email } = req.params;
+    const { oldPassword, newPassword, confNewPassword } = req.body;
+    if (newPassword !== confNewPassword) return res.status(400).json({ msg: "Mật khẩu xác nhận không trùng khớp, vui lòng nhập lại" });
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(newPassword, salt); //note
     try {
-
+        await Users.update({
+            password: hashPassword,
+            password_txt: newPassword,
+            salt: salt,
+        }, {
+            where: {
+                email: email,
+            }
+        });
+        res.json({
+            "message": "Đổi mật khẩu thành công"
+        });
     } catch (error) {
-
+        res.json({ message: error.message });
     }
 }
