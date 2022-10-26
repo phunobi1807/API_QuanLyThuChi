@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 import { Sequelize, Op, NUMBER } from "sequelize";
+import { refreshToken } from "./RefreshToken.js";
 
 
 export const getUsers = async (req, res) => {
@@ -203,27 +204,19 @@ export const getSendMail = async (req, res) => {
             from: "phunobi1807@gmail.com",
             to: `${email}`,
             subject: "Vui lòng nhấn vào link để đổi mật khẩu",
-            text: `Mật khẩu cũ của bạn là  ${user.password_txt}  Vui lòng ấn vào link http://192.168.1.11:3000/change để đổi mật khẩu`,
+            text: `Mật khẩu cũ của bạn là  ${user.password_txt} \nVui lòng ấn vào link http://192.168.102.5:3000/change để đổi mật khẩu`,
         });
         res.status(200).json(user[0]);
-        //   res.status(200).json({msg: "Vui lòng xem Email !"})
     } catch (error) {
         res.status(404).json({ msg: "Email không đúng" });
     }
 }
+// text: 'To reset your password, please click the link below.\n\nhttps://'+process.env.DOMAIN+'/user/reset-password?token='+encodeURIComponent(token)+'&email='+req.body.email
 
-export const changePassword = async (req, res) => {
-    const {currentPassword, newPassword, confNewPassword} = req.body;
+export const resetPassword = async (req, res) => {
     try {
-        const user = await Users.findAll({
-            where: {
-                password: currentPassword
-            }
-        })
-        res.status(200).json(user)
+
     } catch (error) {
-        res.status(404).json({ msg: "Mật khẩu cũ không đúng !" });
+
     }
 }
-
-

@@ -13,8 +13,8 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-    "fullname": "Kiên aaa",
-    "email": "abcdef22@gmail.com",
+    "fullname": "Phus",
+    "email": "phunobi1807@gmail.com",
     "phone_number": "12345671",
     "status": true
 }
@@ -24,8 +24,8 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "code_number": "GS5DJB",
-    "password": "$2b$10$XRnWg8BzaIxfPoANcuTCzO"
+    "code_number": "3RVO2Y",
+    "password": "$2b$10$H0.Zm9.DsTbYZtHFsn5Xuu"
 }
 
 ###
