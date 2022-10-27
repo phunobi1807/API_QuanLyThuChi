@@ -4,17 +4,26 @@ import db from "../config/database";
 const {DataTypes} = Sequelize;
 
 const Thuchi = db.define('thuchi', {
-    noidungthuchi: {
+    title: {
         type: DataTypes.STRING
     },
-    sotienthu: {
-        type: DataTypes.BIGINT
+    userID: {
+        type: DataTypes.INTEGER
     },
-    sotienchi: {
-        type: DataTypes.BIGINT
+    nhomID: {
+        type: DataTypes.INTEGER
     },
-    nhomthuchi: {
+    types: {
         type: DataTypes.BOOLEAN
+    },
+    sotien: {
+        type: DataTypes.DOUBLE
+    },
+    time: {
+        type: DataTypes.DATE
+    },
+    createAt: {
+        type: DataTypes.DATE
     }
 }, {
     freezeTableName: true

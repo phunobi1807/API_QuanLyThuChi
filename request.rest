@@ -2,11 +2,11 @@
 GET http://localhost:8080/users/search?query=kien
 
 ###
-PATCH  http://localhost:8080/users/23
+PATCH  http://localhost:8080/users/8
 Content-Type: application/json
 
 {
-    "code_number": "NP",
+    "code_number": "Kien",
     "status": true
 }
 
@@ -15,8 +15,8 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-    "fullname": "PhuJunior",
-    "email": "phudev1807@gmail.com",
+    "fullname": "NgocPhuss",
+    "email": "phudev180711a@gmail.com",
     "phone_number": "12345671",
     "status": true
 }
@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH http://localhost:8080/reset-password/phudev1807@gmail.com
+PATCH http://localhost:8080/reset-password/abcdef22@gmail.com
 Content-Type:  application/json
 
 {

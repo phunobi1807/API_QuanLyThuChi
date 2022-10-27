@@ -142,7 +142,7 @@ export const Login = async (req, res) => {
             const fullname = user[0].fullname;
             const userCode = user[0].code_number;
             const accessToken = jwt.sign({ userId, fullname, userCode }, process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: '15s'
+                expiresIn: '1d'
             });
             const refreshToken = jwt.sign({ userId, fullname, userCode }, process.env.REFRESH_TOKEN_SECRET, {
                 expiresIn: '1d'
@@ -154,7 +154,7 @@ export const Login = async (req, res) => {
             });
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000
+                maxAge: 24 * 60 * 60 
             });
             res.json({ accessToken });
         } else {
